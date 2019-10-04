@@ -72,6 +72,7 @@ alias gc='git commit -m'
 alias gct='git checkout'
 alias gctb='git checkout -b'
 alias gf='git fetch'
+alias psql='pgcli'
 
 alias google='googler --count 5'
 chrome() {
@@ -80,6 +81,43 @@ chrome() {
 
 lh() {
  /usr/bin/open -a "/Applications/Google Chrome.app" http://localhost:"$1"
+}
+
+alias kuc='kubectl config use-context '
+alias kge='kubectl get endpoints '
+k() {
+  echo "Using Context: $(kubectl config current-context)" 
+}
+kfirstpod() {
+  kubectl get pods | grep "$1" | sed 1q | awk '{print $1;}'
+}
+kgp() {
+  kubectl get pods | grep "$1"
+}
+kpf() {
+  echo "Port forwarding K8s service"
+  svcName="$1"
+  port="$2"
+  podName=$(kfirstpod $svcName)
+  echo $(k)
+  echo "Using pod: $podName"
+  kubectl port-forward $podName $port
+}
+kb() {
+  echo "Executing K8s shell"
+  svcName="$1"
+  podName=$(kfirstpod $svcName)
+  echo $(k)
+  echo "Using pod: $podName"
+ kubectl exec -it $podName bash
+}
+kbe() {
+  echo "Executing Command on K8s shell: $2 $3 $4 $5 $6 $7 $8" 
+  svcName="$1"
+  podName=$(kfirstpod $svcName)
+  echo $(k)
+  echo "Using pod: $podName"
+ kubectl exec $podName $2 $3 $4 $5 $6 $7 $8
 }
 
 # pyenv config added by Bi Transform /Users/grant/Repos/transform/bin/bootstrap.sh on Mon Feb  4 15:28:46 MST 2019
@@ -100,3 +138,9 @@ export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/b
 
 # Add ~/bin to path
 export PATH=$PATH:~/bin
+
+
+# RUBY
+PATH="$HOME/.rbenv/bin:/Library/Frameworks/Python.framework/Versions/3.7/bin:${PATH}"
+export PATH
+eval "$(rbenv init -)"
