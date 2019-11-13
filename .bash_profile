@@ -62,17 +62,24 @@ alias cdb='cd ~/go/src/git.nav.com/backend/'
 alias gob='go build'
 alias gogu='go get -u'
 
-alias gph='git push'
+alias gp='git push'
+alias gpf='git push -f'
 alias gpl='git pull'
 alias gr='git rebase'
 alias gs='git status'
 alias gb='git branch'
 alias ga='git add'
 alias gc='git commit -m'
+alias gca='git commit --amend'
+alias gce='git commit --allow-empty -m "Forcing new pipeline $(date +%s)" && git push'
+alias gcw='git commit -m "wip"'
 alias gct='git checkout'
 alias gctb='git checkout -b'
 alias gf='git fetch'
-alias psql='pgcli'
+alias pg='pgcli'
+alias postgrescli='psql'
+alias keebg='code /Users/grant/Repos/qmk_firmware/keyboards/keebio/quefrency/keymaps/grant_q65/keymap.c'
+alias mkeebg='cd /Users/grant/Repos/qmk_firmware && make keebio/quefrency:grant_q65:avrdude'
 
 alias google='googler --count 5'
 chrome() {
@@ -85,7 +92,7 @@ lh() {
 
 alias kuc='kubectl config use-context '
 alias kge='kubectl get endpoints '
-k() {
+kc() {
   echo "Using Context: $(kubectl config current-context)" 
 }
 kfirstpod() {
@@ -99,7 +106,7 @@ kpf() {
   svcName="$1"
   port="$2"
   podName=$(kfirstpod $svcName)
-  echo $(k)
+  echo $(kc)
   echo "Using pod: $podName"
   kubectl port-forward $podName $port
 }
@@ -107,7 +114,7 @@ kb() {
   echo "Executing K8s shell"
   svcName="$1"
   podName=$(kfirstpod $svcName)
-  echo $(k)
+  echo $(kc)
   echo "Using pod: $podName"
  kubectl exec -it $podName bash
 }
@@ -115,9 +122,14 @@ kbe() {
   echo "Executing Command on K8s shell: $2 $3 $4 $5 $6 $7 $8" 
   svcName="$1"
   podName=$(kfirstpod $svcName)
-  echo $(k)
+  echo $(kc)
   echo "Using pod: $podName"
  kubectl exec $podName $2 $3 $4 $5 $6 $7 $8
+}
+kdp() {
+  svcName="$1"
+  podName=$(kfirstpod $svcName)
+  kubectl describe pod $podName
 }
 
 # pyenv config added by Bi Transform /Users/grant/Repos/transform/bin/bootstrap.sh on Mon Feb  4 15:28:46 MST 2019
@@ -131,6 +143,8 @@ fi
 export GOPATH=$HOME/go
 export PATH=$PATH:/usr/local/go/bin:/Users/grant/go/bin/
 export GOBIN=/Users/grant/go/bin/
+export GO111MODULE=auto
+export GOPRIVATE="*.nav.com"
 
 
 # Add Visual Studio Code (code)
@@ -144,3 +158,6 @@ export PATH=$PATH:~/bin
 PATH="$HOME/.rbenv/bin:/Library/Frameworks/Python.framework/Versions/3.7/bin:${PATH}"
 export PATH
 eval "$(rbenv init -)"
+
+# EXTRAS
+alias opsrc='cd ~/go/src/github.com/luci/go-render/render'
